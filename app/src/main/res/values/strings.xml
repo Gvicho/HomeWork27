@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">HomeWork27</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="category">Category</string>
+    <string name="search">Search</string>
+    <string name="suggestions">Suggestions</string>
+    <string name="heavy_excavator">Heavy Excavator</string>
+    <string name="nothing_was_found">Nothing was Found</string>
+</resources>
