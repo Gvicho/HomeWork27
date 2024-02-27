@@ -15,9 +15,8 @@ import com.example.homework27.presentation.extensions.showSnackBar
 import com.example.homework27.presentation.screen.adapter.VehiclesSuggestionsRecyclerAdapter
 import com.example.homework27.presentation.state.VehiclesSearchPageState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import java.util.Timer
-import java.util.TimerTask
 
 @AndroidEntryPoint
 class SearchCategoryFragment : BaseFragment<FragmentVehiclesSearchBinding>(FragmentVehiclesSearchBinding::inflate) {
@@ -33,36 +32,21 @@ class SearchCategoryFragment : BaseFragment<FragmentVehiclesSearchBinding>(Fragm
 
     private fun setupSearchEditTextListener() {
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-
-            var delay: Long = 1000 // Delay in milliseconds
-            var timer = Timer()
-
-            override fun afterTextChanged(s: Editable?) {
-                // Nothing needed here
-            }
-
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Nothing needed here
+                // No need to implement
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                timer.cancel() // Cancel any previous timer tasks
-                timer.purge() // Remove cancelled tasks from the timer's task queue
+                // No need to implement
+            }
 
-                // If the text is not null or empty, schedule the event
-                if (!s.isNullOrBlank()) {
-                    timer = Timer() // Assign a new Timer instance
-                    timer.schedule(object : TimerTask() {
-                        override fun run() {
-                            // This code will be executed after the user has stopped typing for 1000ms (1 second)
-                            viewModel.onEvent(VehicleSearchPageEvents.LoadVehicles(s.toString()))
-                        }
-                    }, delay)
-                }
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.onEvent(VehicleSearchPageEvents.QueryTextForSearch(s.toString()))
             }
         })
     }
 
+    @OptIn(FlowPreview::class)
     override fun bindObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -76,6 +60,14 @@ class SearchCategoryFragment : BaseFragment<FragmentVehiclesSearchBinding>(Fragm
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.oneTimeEventFlow.collect { message ->
                     showErrorMessage(message)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.searchTextQuery.collect{
+                    viewModel.onEvent(VehicleSearchPageEvents.LoadVehicles(it))
                 }
             }
         }

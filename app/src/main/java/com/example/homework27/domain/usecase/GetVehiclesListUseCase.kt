@@ -13,20 +13,22 @@ class GetVehiclesListUseCase @Inject constructor(
     private val getAllItemsListUseCase: GetAllItemsListUseCase
 ) {
 
-    operator fun invoke(title:String): Flow<ResultWrapper<List<Vehicle>>> {
-        return vehiclesRepository.getVehicles(title).map {result->
-            if(result is ResultWrapper.Success){
+    operator fun invoke(title: String): Flow<ResultWrapper<List<Vehicle>>> {
+        return vehiclesRepository.getVehicles(title).map { result ->
+            if (result is ResultWrapper.Success) {
                 val vehiclesList = result.data!!
 
-                getDepthOfChildUseCase(vehiclesList)
+
                 var newList = getAllItemsListUseCase(vehiclesList)
 
                 newList = newList.filter {
                     it.name.contains(title)
                 }
 
+                getDepthOfChildUseCase(vehiclesList)
+
                 ResultWrapper.Success(newList)
-            }else{
+            } else {
                 result
             }
         }

@@ -5,11 +5,11 @@ import javax.inject.Inject
 
 class GetAllItemsListUseCase @Inject constructor() {
 
-    suspend operator fun invoke(vehicles:List<Vehicle>):List<Vehicle>{
+    operator fun invoke(vehicles:List<Vehicle>):List<Vehicle>{
         return getChildren(vehicles)
     }
 
-    private suspend fun getChildren(vehicles:List<Vehicle>):List<Vehicle>{
+    private fun getChildren(vehicles:List<Vehicle>):List<Vehicle>{
         val list = mutableListOf<Vehicle>()
 
         for (element in vehicles) {

@@ -19,7 +19,7 @@
             android:layout_marginHorizontal="10dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_orange_dot"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical" />
 
         <TextView
             android:id="@+id/tvName"
